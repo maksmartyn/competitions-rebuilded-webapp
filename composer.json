@@ -1,0 +1,27 @@
+{
+    "name": "maksmartyn/competitions-rebuilded-webapp",
+    "description": "Project for self-education",
+    "support": {
+        "issues": "https://github.com/maksmartyn/competitions-rebuilded-webapp/issues?state=open",
+        "source": "https://github.com/maksmartyn/competitions-rebuilded-webapp"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/src/"
+        }
+    },
+    "require":{
+        "php": ">=7.2.0",
+        "twbs/bootstrap": "*",
+        "cycle/orm": ">=1.2.12",
+        "guzzlehttp/guzzle": ">=7.0.1",
+        "codeception/codeception": "*"
+    },
+    "require-dev": {
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/verify": "~0.5.0 || ~1.1.0",
+        "symfony/browser-kit": ">=2.7 <=4.2.4",
+        "codeception/module-phpbrowser": "^1.0.0"
+    }
+}
