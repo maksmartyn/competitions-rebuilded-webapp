@@ -10,17 +10,17 @@ final class DbConnector
     private static $dbal;
     private static $orm;
 
-    private function _construct(): void
+    private function __construct()
     {
         // 
     }
     
-    private function _clone(): void
+    private function __clone()
     {
         // 
     }
     
-    private function _wakeup(): void
+    private function __wakeup()
     {
         throw new \Exception("Cannot unserialize this!");
     }
@@ -42,7 +42,9 @@ final class DbConnector
 
     private static function setOrm(): ORM\ORM
     {
-        self::$orm = new ORM\ORM(new ORM\Factory(self::$dbal));
+        $factory = new ORM\Factory(self::getDbal());
+        $schema = self::getSchema(self::getDbal());
+        self::$orm = new ORM\ORM($factory, $schema);
         return self::$orm;
     }
 
@@ -50,4 +52,10 @@ final class DbConnector
     {
         return isset(self::$orm) ? self::$orm : self::setOrm();
     }
-} 
+
+    private static function getSchema(): ORM\SchemaInterface
+    {
+        $schema = require __DIR__ . '/../config/dbSchema.php';        
+        return new ORM\Schema($schema);
+    }
+}

@@ -11,6 +11,7 @@ final class App
 
     public static function run()
     {
-        return print_r(DbConnector::getDbal()->database('default')->getTables());
+        $result = DbConnector::getOrm();
+        return var_dump($result);
     }
 };
