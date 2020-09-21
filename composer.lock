@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6d88476a9699e68a6ed95c4dfc244e2",
+    "content-hash": "d5f998d55517d663a3d2cbf89c18fa0a",
     "packages": [
         {
             "name": "behat/gherkin",
@@ -323,6 +323,44 @@
             ],
             "description": "PHP DataMapper ORM and Data Modelling Engine",
             "time": "2020-07-30T09:15:03+00:00"
+        },
+        {
+            "name": "cycle/schema-builder",
+            "version": "v1.1.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cycle/schema-builder.git",
+                "reference": "46b475af1f3f3695a7e938805adf7f7e9593b0a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cycle/schema-builder/zipball/46b475af1f3f3695a7e938805adf7f7e9593b0a0",
+                "reference": "46b475af1f3f3695a7e938805adf7f7e9593b0a0",
+                "shasum": ""
+            },
+            "require": {
+                "cycle/orm": "^1.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.1",
+                "phpunit/phpunit": "~8.0",
+                "spiral/code-style": "^1.0",
+                "spiral/debug": "^1.3",
+                "spiral/tokenizer": "^2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cycle\\Schema\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Cycle ORM Schema Builder",
+            "time": "2020-09-17T14:54:18+00:00"
         },
         {
             "name": "doctrine/collections",
