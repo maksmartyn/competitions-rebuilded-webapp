@@ -55,7 +55,12 @@ final class DbConnector
 
     private static function getSchema(): ORM\SchemaInterface
     {
-        $schema = require __DIR__ . '/../config/dbSchema.php';        
+        $schema = null;
+        if (file_exists(__DIR__ . '/../config/dbSchema.php')) {
+            $schema = require __DIR__ . '/../config/dbSchema.php';
+        } else {
+            $schema = DbSchemaBuilder::buildSchema(self::getDbal());
+        }        
         return new ORM\Schema($schema);
     }
 }
