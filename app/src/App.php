@@ -12,6 +12,6 @@ final class App
     public static function run()
     {
         $result = DbConnector::getOrm();
-        return var_dump($result);
+        return null;//var_dump($result);
     }
 };

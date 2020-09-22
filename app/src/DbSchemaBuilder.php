@@ -4,7 +4,7 @@ namespace app;
 
 use Spiral\Database;
 use Cycle\ORM\Schema;
-use Cycle\ORM\SchemaInterface;
+use Cycle\ORM\Relation;
 
 class DbSchemaBuilder
 {
@@ -16,30 +16,45 @@ class DbSchemaBuilder
     public static function buildSchema(Database\DatabaseManager $dbal, string $entitiesScope='app\\models', string $database='default'): array
     {
         $tables = $dbal->database($database)->getTables();
-        $validateResult = EntityValidator::validate($tables);
-        if ($validateResult === null) {
-            foreach ($tables as $table) {
-                $tableName = $table->getName();
-                $className = ucfirst($tableName);
-                $primaryKey = implode($table->getPrimaryKeys());
-                $properties = array_keys($table->getColumns());
-                $columns = array_combine($properties, $properties);
-                $schema[$tableName] = [
-                    Schema::MAPPER      => Mapper::class,
-                    Schema::ENTITY      => $entitiesScope.'\\'.$className,
-                    Schema::DATABASE    => $database,
-                    Schema::TABLE       => $tableName,
-                    Schema::PRIMARY_KEY => $primaryKey,
-                    Schema::COLUMNS     => $columns,
-                    Schema::TYPECAST    => [
-                        'id' => 'int'
-                    ],
-                    Schema::RELATIONS   => $table->getForeignKeys()
-                ];
+        foreach ($tables as $table) {
+            $tableName = $table->getName();
+            $className = ucfirst($tableName);
+            $primaryKey = implode($table->getPrimaryKeys());
+            $properties = array_keys($table->getColumns());
+            $columns = $table->getColumns();
+            $columnsBindings = array_combine($properties, $properties);
+            $columnsTypes = [];
+            foreach ($columns as $column) {
+                $columnsTypes[$column->getName()] = $column->getType();
             }
-        } else {
-            var_dump ($validateResult);
+            $fks = $table->getForeignKeys();
+            foreach ($fks as $fk) {
+                $fkColumns = array_values($fk->getColumns());
+                foreach ($fkColumns as $fkColumn) {
+                    $relations[$fkColumn] = [
+                        Relation::TYPE   => Relation::HAS_ONE,
+                        Relation::TARGET => $fk->getForeignTable(),
+                        Relation::SCHEMA => [
+                            Relation::CASCADE   => true,
+                            Relation::INNER_KEY => implode($fk->getForeignKeys()),
+                            Relation::OUTER_KEY => implode($fk->getColumns()),
+                        ]
+                    ];
+                }
+            }
+            var_dump ($relations);
+            $schema[$tableName] = [
+                Schema::MAPPER      => 'Cycle\ORM\Mapper',
+                Schema::ENTITY      => $entitiesScope.'\\'.$className,
+                Schema::DATABASE    => $database,
+                Schema::TABLE       => $tableName,
+                Schema::PRIMARY_KEY => $primaryKey,
+                Schema::COLUMNS     => $columnsBindings,
+                Schema::TYPECAST    => $columnsTypes,
+                Schema::RELATIONS   => $relations 
+            ];
         }
+        //var_dump ($schema);
         $schema = [];
         return $schema;
     }

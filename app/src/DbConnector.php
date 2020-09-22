@@ -43,7 +43,13 @@ final class DbConnector
     private static function setOrm(): ORM\ORM
     {
         $factory = new ORM\Factory(self::getDbal());
-        $schema = self::getSchema(self::getDbal());
+        $tables = self::getDbal()->database()->getTables();
+        $validateResult = EntityValidator::validate($tables);
+        if ($validateResult !== null) {           // TODO: after fixing a problems change !== to === 
+            $schema = self::getSchema(self::getDbal());
+        } else {
+            throw new \Exception("Validate do not pass: ".implode(", ",$validateResult). ". " . "Message received: ");
+        }
         self::$orm = new ORM\ORM($factory, $schema);
         return self::$orm;
     }
@@ -62,5 +68,6 @@ final class DbConnector
             $schema = DbSchemaBuilder::buildSchema(self::getDbal());
         }        
         return new ORM\Schema($schema);
+        
     }
 }
